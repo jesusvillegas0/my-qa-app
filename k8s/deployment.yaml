@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-qa-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-qa-app
+  template:
+    metadata:
+      labels:
+        app: my-qa-app
+    spec:
+      containers:
+      - name: my-qa-app
+        image: ghcr.io/jesusvillegas0/my-qa-app:latest
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: ghcr-secret  # Aquí se agrega el secret para la autenticación con GHCR
