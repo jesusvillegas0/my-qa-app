@@ -15,8 +15,13 @@ app.get('/sum', (req, res) => {
   res.json({ result });
 });
 
+// Nueva ruta para la raíz
+app.get('/', (req, res) => {
+  res.send('Hello, welcome to my QA app!');
+});
+
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-module.exports = { app, server }; // Exportamos tanto la app como el servidor, esto es una prueba
+module.exports = { app, server };
