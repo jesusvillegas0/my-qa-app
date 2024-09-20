@@ -29,12 +29,12 @@ jobs:
 
     # Autenticación en GitHub Container Registry (GHCR)
     - name: Log in to GitHub Container Registry
-      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ secrets.GITHUB_ACTOR }} --password-stdin
+      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
     # Construcción de la imagen Docker
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ secrets.GITHUB_ACTOR }}/my-qa-app:latest .
+      run: docker build -t ghcr.io/${{ github.actor }}/my-qa-app:latest .
 
     # Push de la imagen a GitHub Container Registry (GHCR)
     - name: Push Docker image to GitHub Container Registry
-      run: docker push ghcr.io/${{ secrets.GITHUB_ACTOR }}/my-qa-app:latest
+      run: docker push ghcr.io/${{ github.actor }}/my-qa-app:latest
