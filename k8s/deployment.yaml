@@ -17,5 +17,33 @@ spec:
         image: ghcr.io/jesusvillegas0/my-qa-app:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: PGUSER
+          value: "postgres"
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        - name: PGHOST
+          value: "postgresql-service"
+        - name: PGDATABASE
+          value: "myapp"
+        - name: PGPORT
+          value: "5432"
       imagePullSecrets:
       - name: ghcr-secret  # Aquí se agrega el secret para la autenticación con GHCR
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-qa-app-service
+spec:
+  type: NodePort
+  selector:
+    app: my-qa-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+      nodePort: 30870

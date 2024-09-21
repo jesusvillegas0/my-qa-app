@@ -1,10 +1,7 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
     branches:
       - master
 
@@ -13,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Node.js
+    - name: Install Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
@@ -27,14 +24,10 @@ jobs:
     - name: Run tests
       run: npm test
 
-    # Autenticación en GitHub Container Registry (GHCR)
-    - name: Log in to GitHub Container Registry
-      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-    # Construcción de la imagen Docker
     - name: Build Docker image
-      run: docker build -t ghcr.io/${{ github.actor }}/my-qa-app:latest .
+      run: docker build -t ghcr.io/jesusvillegas0/my-qa-app:latest .
 
-    # Push de la imagen a GitHub Container Registry (GHCR)
-    - name: Push Docker image to GitHub Container Registry
-      run: docker push ghcr.io/${{ github.actor }}/my-qa-app:latest
+    - name: Push Docker image
+      run: |
+        echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u jesusvillegas0 --password-stdin
+        docker push ghcr.io/jesusvillegas0/my-qa-app:latest
